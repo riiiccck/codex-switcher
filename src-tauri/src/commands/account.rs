@@ -2,7 +2,8 @@
 
 use crate::auth::{
     add_account, create_chatgpt_account_from_refresh_token, ensure_chatgpt_tokens_fresh_locked,
-    get_active_account, import_from_auth_json, import_from_auth_json_contents, load_accounts,
+    get_active_account, get_codex_auth_file, import_from_auth_json, import_from_auth_json_contents,
+    load_accounts,
     read_current_auth, remove_account, save_accounts, set_active_account, switch_to_account,
     sync_active_account_tokens, touch_account, AUTH_OPERATION_LOCK,
 };
@@ -101,6 +102,33 @@ pub async fn get_active_account_info() -> Result<Option<AccountInfo>, String> {
     } else {
         Ok(None)
     }
+}
+
+#[derive(Debug, serde::Serialize)]
+pub struct LocalCodexAuthLocation {
+    pub path: String,
+    pub display_path: String,
+}
+
+/// Return the standard local Codex auth file location when it exists.
+/// Checks CODEX_HOME first, otherwise ~/.codex. No recursive filesystem scan.
+#[tauri::command]
+pub async fn find_local_codex_auth() -> Result<Option<LocalCodexAuthLocation>, String> {
+    let path = get_codex_auth_file().map_err(|e| e.to_string())?;
+    if !path.is_file() {
+        return Ok(None);
+    }
+
+    let display_path = if std::env::var_os("CODEX_HOME").is_some() {
+        "$CODEX_HOME/auth.json"
+    } else {
+        "~/.codex/auth.json"
+    };
+
+    Ok(Some(LocalCodexAuthLocation {
+        path: path.to_string_lossy().into_owned(),
+        display_path: display_path.to_string(),
+    }))
 }
 
 /// Add an account from an auth.json file
