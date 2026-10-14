@@ -1,0 +1,54 @@
+name: PR Windows Build Artifact
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: pr-windows-artifact-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  windows-artifact:
+    name: Build Windows test installer
+    runs-on: windows-latest
+    env:
+      VITE_PR_TEST_BUILD: "true"
+      CODEX_SWITCHER_PR_TEST_BUILD: "1"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          package-manager-cache: false
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-pc-windows-msvc
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build isolated PR test installer
+        run: pnpm tauri:win build --target x86_64-pc-windows-msvc --bundles nsis --config src-tauri/tauri.pr-windows.conf.json
+
+      - name: Upload Windows installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: codex-switcher-pr-${{ github.event.pull_request.number || github.run_number }}-windows-x64
+          path: src-tauri/target/x86_64-pc-windows-msvc/release/bundle/nsis/*.exe
+          if-no-files-found: error
+          retention-days: 7
