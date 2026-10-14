@@ -11,7 +11,7 @@ use tokio::runtime::Runtime;
 
 use crate::commands::{
     add_account_from_auth_json_text, add_account_from_file, cancel_login, check_codex_processes,
-    complete_login, delete_account, export_accounts_full_encrypted_bytes,
+    complete_login, delete_account, export_accounts_full_encrypted_bytes, find_local_codex_auth,
     export_accounts_slim_text, fetch_usage, get_account_usage_stats, get_active_account_info,
     get_masked_account_ids, import_accounts_full_encrypted_bytes, import_accounts_slim_text,
     kill_codex_processes, list_accounts, refresh_account_metadata, refresh_all_accounts_usage,
@@ -137,6 +137,7 @@ async fn invoke_web_command(command: &str, payload: Value) -> Result<Value, Stri
     match command {
         "list_accounts" => to_json(list_accounts().await?),
         "get_active_account_info" => to_json(get_active_account_info().await?),
+        "find_local_codex_auth" => to_json(find_local_codex_auth().await?),
         "add_account_from_file" => {
             let args: FileImportArgs = parse_args(payload)?;
             to_json(add_account_from_file(args.path, args.name).await?)
