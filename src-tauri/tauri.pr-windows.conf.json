@@ -16,11 +16,14 @@
   },
   "bundle": {
     "createUpdaterArtifacts": false,
-    "targets": ["nsis"],
+    "targets": [
+      "nsis"
+    ],
     "windows": {
       "nsis": {
         "installMode": "currentUser"
       }
     }
-  }
+  },
+  "mainBinaryName": "codex-switcher-pr-test"
 }
