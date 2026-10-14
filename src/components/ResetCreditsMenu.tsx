@@ -1,3 +1,4 @@
+import { t } from "../lib/i18n";
 import { useEffect, useId, useRef, useState } from "react";
 import type { AccountResetCredits } from "../types";
 import { formatResetCreditDateTime, getAvailableResetCredits } from "../lib/resetCredits";
@@ -148,13 +149,11 @@ export function ResetCreditsMenu({
         <div
           id={popupId}
           role="dialog"
-          aria-label="Reset credit expiry details"
+          aria-label={t("Reset credit expiry details")}
           className="absolute right-0 top-full z-30 mt-2 w-80 max-w-[calc(100vw-3rem)] overflow-hidden rounded-xl border border-gray-200 bg-white text-left shadow-xl dark:border-gray-700 dark:bg-gray-900"
         >
           <div className="flex items-center justify-between border-b border-gray-100 px-3 py-2.5 dark:border-gray-800">
-            <span className="text-xs font-semibold text-gray-900 dark:text-gray-100">
-              Available resets
-            </span>
+            <span className="text-xs font-semibold text-gray-900 dark:text-gray-100">{t("Available resets")}</span>
             <span className="text-[11px] text-gray-500 dark:text-gray-400">
               {count}
             </span>
@@ -179,9 +178,7 @@ export function ResetCreditsMenu({
               </div>
             ))}
           </div>
-          <div className="border-t border-gray-100 px-3 py-2 text-[10px] text-gray-400 dark:border-gray-800 dark:text-gray-500">
-            Times shown in your local time
-          </div>
+          <div className="border-t border-gray-100 px-3 py-2 text-[10px] text-gray-400 dark:border-gray-800 dark:text-gray-500">{t("Times shown in your local time")}</div>
         </div>
       )}
     </div>

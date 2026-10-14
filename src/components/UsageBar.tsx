@@ -1,3 +1,4 @@
+import { t } from "../lib/i18n";
 import type { UsageInfo } from "../types";
 
 interface UsageBarProps {
@@ -86,9 +87,7 @@ export function UsageBar({ usage, loading }: UsageBarProps) {
   if (loading && !usage) {
     return (
       <div className="space-y-2">
-        <div className="text-xs text-gray-400 dark:text-gray-500 italic animate-pulse">
-          Fetching usage...
-        </div>
+        <div className="text-xs text-gray-400 dark:text-gray-500 italic animate-pulse">{t("Fetching usage...")}</div>
         <div className="h-1.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden animate-pulse">
           <div className="h-full w-2/3 bg-gray-200 dark:bg-gray-700"></div>
         </div>
@@ -98,9 +97,7 @@ export function UsageBar({ usage, loading }: UsageBarProps) {
 
   if (!usage) {
     return (
-      <div className="text-xs text-gray-400 dark:text-gray-500 italic py-1 animate-pulse">
-        Fetching usage...
-      </div>
+      <div className="text-xs text-gray-400 dark:text-gray-500 italic py-1 animate-pulse">{t("Fetching usage...")}</div>
     );
   }
 
@@ -117,9 +114,7 @@ export function UsageBar({ usage, loading }: UsageBarProps) {
 
   if (!hasPrimary && !hasSecondary) {
     return (
-      <div className="text-xs text-gray-400 dark:text-gray-500 italic py-1">
-        No rate limit data
-      </div>
+      <div className="text-xs text-gray-400 dark:text-gray-500 italic py-1">{t("No rate limit data")}</div>
     );
   }
 

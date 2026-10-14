@@ -1,3 +1,4 @@
+import { t } from "../lib/i18n";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type {
   AccountDailyUsage,
@@ -170,16 +171,14 @@ function TokenActivity({ daily }: { daily: AccountDailyUsage[] }) {
 
   if (bars.length === 0 || !bars.some((day) => day.tokens > 0)) {
     return (
-      <div className="flex h-14 items-center justify-center rounded-lg border border-dashed border-gray-200 text-[11px] text-gray-400 dark:border-gray-800 dark:text-gray-500">
-        Daily activity unavailable
-      </div>
+      <div className="flex h-14 items-center justify-center rounded-lg border border-dashed border-gray-200 text-[11px] text-gray-400 dark:border-gray-800 dark:text-gray-500">{t("Daily activity unavailable")}</div>
     );
   }
 
   return (
     <div className="rounded-lg border border-gray-200 bg-white px-3 pb-3 pt-2 dark:border-gray-800 dark:bg-gray-950/40">
       <div className="mb-2 flex items-center justify-between text-[11px]">
-        <span className="font-medium text-gray-600 dark:text-gray-300">Token activity</span>
+        <span className="font-medium text-gray-600 dark:text-gray-300">{t("Token activity")}</span>
         <div className="flex items-center gap-2">
           <span className="text-gray-400 dark:text-gray-500">{activityRangeLabel(range)}</span>
           <select
@@ -189,7 +188,7 @@ function TokenActivity({ daily }: { daily: AccountDailyUsage[] }) {
               setRange(value === "all" ? "all" : (Number(value) as ActivityRange));
             }}
             className="h-6 rounded-md border border-gray-200 bg-gray-50 px-1.5 text-[11px] text-gray-600 outline-none dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300"
-            aria-label="Token activity range"
+            aria-label={t("Token activity range")}
           >
             {ACTIVITY_RANGE_OPTIONS.map((option) => (
               <option key={option.label} value={option.value}>
@@ -259,9 +258,7 @@ function DetailPanel({
       onToggle={(event) => setOpen(event.currentTarget.open)}
       className="rounded-lg border border-gray-200 bg-gray-50 transition-colors dark:border-gray-800 dark:bg-gray-950/50"
     >
-      <summary className="flex cursor-pointer list-none items-center justify-between rounded-lg px-3 py-2 text-[12px] font-semibold text-gray-700 transition-colors hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-900">
-        More usage details
-        <span className="flex h-6 w-6 items-center justify-center rounded-md bg-white text-gray-500 transition-colors dark:bg-gray-900 dark:text-gray-400">
+      <summary className="flex cursor-pointer list-none items-center justify-between rounded-lg px-3 py-2 text-[12px] font-semibold text-gray-700 transition-colors hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-900">{t("More usage details")}<span className="flex h-6 w-6 items-center justify-center rounded-md bg-white text-gray-500 transition-colors dark:bg-gray-900 dark:text-gray-400">
           <svg
             className={`h-3.5 w-3.5 transition-transform ${open ? "rotate-180" : ""}`}
             viewBox="0 0 20 20"
@@ -285,26 +282,24 @@ function DetailPanel({
 
         {hasActivity && (
           <div className="space-y-1.5">
-            <div className="mb-1 text-[11px] font-semibold text-gray-600 dark:text-gray-300">
-              Activity insights
-            </div>
+            <div className="mb-1 text-[11px] font-semibold text-gray-600 dark:text-gray-300">{t("Activity insights")}</div>
             <div className="flex justify-between gap-2 text-[11px]">
-              <span className="text-gray-500 dark:text-gray-400">Fast mode</span>
+              <span className="text-gray-500 dark:text-gray-400">{t("Fast mode")}</span>
               <span className="text-gray-800 dark:text-gray-100">{formatPercent(activity.fast_mode_percent)}</span>
             </div>
             <div className="flex justify-between gap-2 text-[11px]">
-              <span className="text-gray-500 dark:text-gray-400">Reasoning</span>
+              <span className="text-gray-500 dark:text-gray-400">{t("Reasoning")}</span>
               <span className="text-gray-800 dark:text-gray-100">
                 {activity.reasoning_effort ?? "--"}
                 {activity.reasoning_effort_percent !== null && ` · ${formatPercent(activity.reasoning_effort_percent)}`}
               </span>
             </div>
             <div className="flex justify-between gap-2 text-[11px]">
-              <span className="text-gray-500 dark:text-gray-400">Skills explored</span>
+              <span className="text-gray-500 dark:text-gray-400">{t("Skills explored")}</span>
               <span className="text-gray-800 dark:text-gray-100">{formatNumber(activity.skills_explored)}</span>
             </div>
             <div className="flex justify-between gap-2 text-[11px]">
-              <span className="text-gray-500 dark:text-gray-400">Total threads</span>
+              <span className="text-gray-500 dark:text-gray-400">{t("Total threads")}</span>
               <span className="text-gray-800 dark:text-gray-100">{formatNumber(activity.total_threads)}</span>
             </div>
           </div>
@@ -312,9 +307,7 @@ function DetailPanel({
 
         {topInvocations.length > 0 && (
           <div className="space-y-1.5">
-            <div className="mb-1 text-[11px] font-semibold text-gray-600 dark:text-gray-300">
-              Most used plugins
-            </div>
+            <div className="mb-1 text-[11px] font-semibold text-gray-600 dark:text-gray-300">{t("Most used plugins")}</div>
             {topInvocations.slice(0, 5).map((invocation) => (
               <InvocationRow
                 key={`${invocation.kind}-${invocation.display_name}-${invocation.usage_count}`}
@@ -423,14 +416,14 @@ export function AccountUsageStats({
       <div>
         <div className="mb-3 flex items-center justify-between gap-3">
           <p className="truncate text-[11px] text-gray-500 dark:text-gray-400">
-            {currentStats?.stats_as_of ? `Stats as of ${currentStats.stats_as_of}` : currentStats?.source ?? "ChatGPT backend"}
+            {currentStats?.stats_as_of ? `Stats as of ${currentStats.stats_as_of}` : currentStats?.source ?? t("ChatGPT backend")}
             {generatedAt && ` · updated ${generatedAt}`}
           </p>
           <button
             onClick={() => void loadStats()}
             disabled={loading || !enabled}
             className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200 disabled:opacity-50 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
-            title="Refresh usage stats"
+            title={t("Refresh usage stats")}
           >
             <span className={loading ? "inline-block animate-spin" : ""}>↻</span>
           </button>
@@ -463,7 +456,7 @@ export function AccountUsageStats({
           </div>
         ) : (
           <div className="rounded-lg border border-dashed border-gray-200 px-3 py-3 text-xs text-gray-500 dark:border-gray-800 dark:text-gray-400">
-            {currentStats?.error ?? "Usage stats unavailable."}
+            {currentStats?.error ?? t("Usage stats unavailable.")}
           </div>
         )}
       </div>

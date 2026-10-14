@@ -1,3 +1,4 @@
+import { t } from "../lib/i18n";
 import { useState, useEffect, useCallback, useRef } from "react";
 import type { Update } from "@tauri-apps/plugin-updater";
 import { isTauriRuntime } from "../lib/platform";
@@ -108,15 +109,11 @@ export function UpdateChecker() {
               <button
                 onClick={() => setDismissed(true)}
                 className="px-3 py-1.5 text-xs font-medium rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 transition-colors"
-              >
-                Later
-              </button>
+              >{t("Later")}</button>
               <button
                 onClick={handleDownloadAndInstall}
                 className="px-3 py-1.5 text-xs font-medium rounded-lg bg-gray-900 hover:bg-gray-800 dark:bg-gray-100 dark:hover:bg-gray-200 text-white dark:text-gray-900 transition-colors"
-              >
-                Update
-              </button>
+              >{t("Update")}</button>
             </div>
           </div>
         )}
@@ -124,7 +121,7 @@ export function UpdateChecker() {
         {status.kind === "downloading" && (
           <div>
             <div className="flex items-center justify-between mb-2">
-              <p className="text-sm font-medium text-gray-900 dark:text-gray-100">Downloading update...</p>
+              <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{t("Downloading update...")}</p>
               <p className="text-xs text-gray-500 dark:text-gray-400">
                 {formatBytes(status.downloaded)}
                 {status.total ? ` / ${formatBytes(status.total)}` : ""}
@@ -145,29 +142,21 @@ export function UpdateChecker() {
         )}
 
         {status.kind === "installing" && (
-          <p className="text-sm font-medium text-gray-900 dark:text-gray-100" role="status">
-            Installing update. Complete any system authorization prompt...
-          </p>
+          <p className="text-sm font-medium text-gray-900 dark:text-gray-100" role="status">{t("Installing update. Complete any system authorization prompt...")}</p>
         )}
 
         {status.kind === "ready" && (
           <div className="flex items-center justify-between">
-            <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
-              Update ready. Restart to apply.
-            </p>
+            <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{t("Update ready. Restart to apply.")}</p>
             <div className="flex items-center gap-2 shrink-0">
               <button
                 onClick={() => setDismissed(true)}
                 className="px-3 py-1.5 text-xs font-medium rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 transition-colors"
-              >
-                Later
-              </button>
+              >{t("Later")}</button>
               <button
                 onClick={handleRelaunch}
                 className="px-3 py-1.5 text-xs font-medium rounded-lg bg-gray-900 hover:bg-gray-800 dark:bg-gray-100 dark:hover:bg-gray-200 text-white dark:text-gray-900 transition-colors"
-              >
-                Restart
-              </button>
+              >{t("Restart")}</button>
             </div>
           </div>
         )}
@@ -180,9 +169,7 @@ export function UpdateChecker() {
             <button
               onClick={() => setDismissed(true)}
               className="px-3 py-1.5 text-xs font-medium rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 transition-colors shrink-0 ml-2"
-            >
-              Dismiss
-            </button>
+            >{t("Dismiss")}</button>
           </div>
         )}
       </div>
