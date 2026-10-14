@@ -4,6 +4,7 @@ import { isTauriRuntime } from "../lib/platform";
 import { installUpdate, type UpdateInstallationStatus } from "../lib/updateInstallation";
 
 const UPDATE_CHECK_INTERVAL_MS = 6 * 60 * 60 * 1000;
+const PR_TEST_BUILD = import.meta.env.VITE_PR_TEST_BUILD === "true";
 
 type UpdateStatus =
   | { kind: "idle" }
@@ -18,7 +19,7 @@ export function UpdateChecker() {
   const checkInFlightRef = useRef(false);
 
   const checkForUpdate = useCallback(async () => {
-    if (!isTauriRuntime() || checkInFlightRef.current) return;
+    if (!isTauriRuntime() || PR_TEST_BUILD || checkInFlightRef.current) return;
 
     checkInFlightRef.current = true;
     try {
@@ -40,7 +41,7 @@ export function UpdateChecker() {
   }, []);
 
   useEffect(() => {
-    if (!isTauriRuntime()) return;
+    if (!isTauriRuntime() || PR_TEST_BUILD) return;
 
     void checkForUpdate();
 
@@ -75,7 +76,7 @@ export function UpdateChecker() {
     }
   };
 
-  if (!isTauriRuntime()) {
+  if (!isTauriRuntime() || PR_TEST_BUILD) {
     return null;
   }
 
