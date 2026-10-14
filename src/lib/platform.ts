@@ -2,6 +2,15 @@ import type { ImportAccountsSummary } from "../types";
 
 export type FileSource = string | File;
 
+export interface LocalCodexAuthLocation {
+  path: string;
+  display_path: string;
+}
+
+export async function findLocalCodexAuth(): Promise<LocalCodexAuthLocation | null> {
+  return invokeBackend<LocalCodexAuthLocation | null>("find_local_codex_auth");
+}
+
 export function isTauriRuntime(): boolean {
   return typeof window !== "undefined" && "__TAURI_INTERNALS__" in window;
 }
