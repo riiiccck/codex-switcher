@@ -1,3 +1,4 @@
+import { t } from "../lib/i18n";
 import { useCallback, useState, useRef, useEffect } from "react";
 import type { AccountResetCredits, AccountUsageStats as AccountUsageStatsInfo, AccountWithUsage } from "../types";
 import { invokeBackend } from "../lib/platform";
@@ -294,7 +295,7 @@ export function AccountCard({
                   setEditName(account.name);
                   setIsEditing(true);
                 }}
-                title={masked ? undefined : "Click to rename"}
+                title={masked ? undefined : t("Click to rename")}
               >
                 <BlurredText blur={masked}>{account.name}</BlurredText>
               </h3>
@@ -313,7 +314,7 @@ export function AccountCard({
             onClick={handleRefresh}
             disabled={isRefreshing}
             className="p-1 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors disabled:opacity-50"
-            title="Refresh usage"
+            title={t("Refresh usage")}
           >
             <span className={`inline-block h-4 w-4 text-base leading-none ${isRefreshing ? "animate-spin" : ""}`}>↻</span>
           </button>
@@ -322,7 +323,7 @@ export function AccountCard({
             <button
               onClick={onToggleMask}
               className="p-1 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-              title={masked ? "Show info" : "Hide info"}
+              title={masked ? t("Show info") : t("Hide info")}
             >
               {masked ? (
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -372,9 +373,7 @@ export function AccountCard({
           <button
             disabled
             className="flex-1 px-4 py-2 text-sm font-medium rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700 cursor-default"
-          >
-            ✓ Active
-          </button>
+          >{t("✓ Active")}</button>
         ) : (
           <button
             onClick={onSwitch}
@@ -384,14 +383,14 @@ export function AccountCard({
                 ? "bg-blue-100 hover:bg-blue-200 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 text-blue-800 dark:text-blue-300"
                 : "bg-gray-900 hover:bg-gray-800 dark:bg-gray-100 dark:hover:bg-gray-200 text-white dark:text-gray-900"
             }`}
-            title={codexRunning ? "Close running Codex processes and switch account" : undefined}
+            title={codexRunning ? t("Close running Codex processes and switch account") : undefined}
           >
             {codexRunning && !switching && (
               <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v4m0 4h.01M10.3 3.9 1.8 18.1A2 2 0 003.5 21h17a2 2 0 001.7-2.9L13.7 3.9a2 2 0 00-3.4 0Z" />
               </svg>
             )}
-            {switching ? "Switching..." : "Switch"}
+            {switching ? t("Switching...") : t("Switch")}
           </button>
         )}
         <button
@@ -404,7 +403,7 @@ export function AccountCard({
               ? "bg-amber-100 dark:bg-amber-900/30 text-amber-500 dark:text-amber-300"
               : "bg-amber-50 dark:bg-amber-900/20 hover:bg-amber-100 dark:hover:bg-amber-900/40 text-amber-700 dark:text-amber-300"
           }`}
-          title={warmingUp ? "Sending warm-up request..." : "Send minimal warm-up request"}
+          title={warmingUp ? t("Sending warm-up request...") : t("Send minimal warm-up request")}
         >
           ⚡
         </button>
@@ -419,10 +418,10 @@ export function AccountCard({
             } disabled:opacity-60`}
             title={
               autoWarmupManagedByAll
-                ? "Auto warm-up is enabled for all accounts"
+                ? t("Auto warm-up is enabled for all accounts")
                 : autoWarmupEnabled
-                  ? "Disable auto warm-up for this account"
-                : "Enable auto warm-up for this account"
+                  ? t("Disable auto warm-up for this account")
+                : t("Enable auto warm-up for this account")
             }
           >
             <span className="flex items-center gap-1">
@@ -438,7 +437,7 @@ export function AccountCard({
               ? "bg-indigo-50 dark:bg-indigo-900/20 hover:bg-indigo-100 dark:hover:bg-indigo-900/40 text-indigo-600 dark:text-indigo-300"
               : "bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300"
           }`}
-          title={statsOpen ? "Hide usage statistics" : "Show usage statistics"}
+          title={statsOpen ? t("Hide usage statistics") : t("Show usage statistics")}
         >
           <svg
             className="h-4 w-4"
@@ -455,7 +454,7 @@ export function AccountCard({
         <button
           onClick={onDelete}
           className="px-3 py-2 text-sm rounded-lg bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/40 text-red-600 dark:text-red-300 transition-colors"
-          title="Remove account"
+          title={t("Remove account")}
         >
           ✕
         </button>
