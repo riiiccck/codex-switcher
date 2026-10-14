@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   describeFileSource,
+  findLocalCodexAuth,
   isTauriRuntime,
   openExternalUrl,
   pickAuthJsonFile,
   type FileSource,
+  type LocalCodexAuthLocation,
 } from "../lib/platform";
 
 interface AddAccountModalProps {
@@ -29,6 +31,8 @@ export function AddAccountModal({
   const [activeTab, setActiveTab] = useState<Tab>("oauth");
   const [name, setName] = useState("");
   const [fileSource, setFileSource] = useState<FileSource | null>(null);
+  const [localAuth, setLocalAuth] = useState<LocalCodexAuthLocation | null>(null);
+  const [localAuthLoading, setLocalAuthLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [oauthPending, setOauthPending] = useState(false);
@@ -36,6 +40,26 @@ export function AddAccountModal({
   const [copied, setCopied] = useState<boolean>(false);
   const isPrimaryDisabled = loading || (activeTab === "oauth" && oauthPending);
   const tauriRuntime = isTauriRuntime();
+
+  useEffect(() => {
+    if (!isOpen || !tauriRuntime) return;
+    let cancelled = false;
+    setLocalAuthLoading(true);
+    void findLocalCodexAuth()
+      .then((found) => {
+        if (!cancelled) setLocalAuth(found);
+      })
+      .catch((err) => {
+        console.error("Failed to detect local Codex file:", err);
+        if (!cancelled) setLocalAuth(null);
+      })
+      .finally(() => {
+        if (!cancelled) setLocalAuthLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [isOpen, tauriRuntime]);
 
   const resetForm = () => {
     setName("");
@@ -220,9 +244,36 @@ export function AddAccountModal({
           )}
 
           {activeTab === "import" && (
-            <div>
+            <div className="space-y-4">
+              {tauriRuntime && (
+                <div className="rounded-lg border border-gray-200 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-800">
+                  <div className="text-sm font-medium text-gray-800 dark:text-gray-200">Local Codex account</div>
+                  {localAuthLoading ? (
+                    <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Checking the standard Codex location...</p>
+                  ) : localAuth ? (
+                    <>
+                      <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                        Found <span className="font-mono">{localAuth.display_path}</span>
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => setFileSource(localAuth.path)}
+                        className="mt-3 w-full rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200"
+                      >
+                        Use detected auth.json
+                      </button>
+                    </>
+                  ) : (
+                    <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                      No auth.json found in $CODEX_HOME or ~/.codex.
+                    </p>
+                  )}
+                </div>
+              )}
+
+              <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Select auth.json file
+                Select another auth.json file
               </label>
               <div className="flex gap-2">
                 <div className="flex-1 px-4 py-2.5 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-600 dark:text-gray-300 truncate">
@@ -236,8 +287,9 @@ export function AddAccountModal({
                 </button>
               </div>
               <p className="text-xs text-gray-400 dark:text-gray-500 mt-2">
-                Import credentials from an existing Codex auth.json file
+                Manual selection remains available for non-standard locations.
               </p>
+              </div>
             </div>
           )}
 
